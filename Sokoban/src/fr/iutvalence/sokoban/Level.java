@@ -18,6 +18,7 @@ public class Level {
 	/**
 	 * Numéro du niveau
 	 */
+	@SuppressWarnings("unused")
 	private static int levelNumber = 0;
 	
 	/**
@@ -49,8 +50,8 @@ public class Level {
 	 * @throws InvalidMapPositionException 
 	 */
 	public void addCell(CellCharacter cell, Position position) throws InvalidMapPositionException{
-		if(position.getX() < 0 || position.getX() > (this.mapWidth - 1)
-		   || position.getY() < 0 || position.getY() > (this.mapHeight - 1)		
+		if(position.getX() < 0 || position.getX() > (this.mapHeight)	
+		   || position.getY() < 0 || position.getY() > (this.mapWidth)
 		){
 			throw new InvalidMapPositionException();
 		}
@@ -63,8 +64,10 @@ public class Level {
 	 * @param filePath
 	 */
 	public void loadFromFile(String filePath){
+		BufferedReader buffer = null;
 		try {
-			BufferedReader buffer = new BufferedReader(new FileReader(filePath));
+			// On charge en mémoire le fichier du niveau
+			buffer = new BufferedReader(new FileReader(filePath));
 			
 			// Ligne courrante
 			String currentLine;
@@ -80,10 +83,13 @@ public class Level {
 			while((currentLine = buffer.readLine()) != null){
 				this.mapHeight++;
 				if(this.mapWidth < currentLine.length())
-					this.mapWidth++;
+					this.mapWidth = currentLine.length();
 				allLines.append(currentLine);
 				allLines.append('\n');
 			}
+			
+			// On ferme le fichier
+			buffer.close();
 			
 			// On initialise le tableau this.map
 			this.map = new CellCharacter[this.mapHeight][this.mapWidth];
@@ -129,6 +135,18 @@ public class Level {
 		} catch (InvalidMapPositionException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder str = new StringBuilder();
+		for (int line = 0; line < this.mapHeight; line++) {
+			for (int column = 0; column < this.mapWidth; column++) {
+				str.append(this.map[line][column]);
+			}
+			str.append("\n");
+		}
+		return str.toString();
 	}
 	
 }
