@@ -8,6 +8,8 @@ package fr.iutvalence.sokoban;
 public class Main {
 	
 	public static void main(String[] args){
-		
+		Level level = new Level();
+		level.loadFromFile("F:\\level1.txt");
+		System.out.print(level);
 	}
 }
